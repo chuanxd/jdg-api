@@ -1,0 +1,5 @@
+/target
+pihole-FTL.db
+
+# misc
+.DS_Store
