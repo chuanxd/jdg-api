@@ -1,6 +1,7 @@
 use axum::{routing::get, Router};
 use routes::{stats::get_stats, top_domains::get_top_domains};
 
+mod db;
 mod routes;
 
 #[tokio::main]

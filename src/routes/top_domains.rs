@@ -1,7 +1,6 @@
+use crate::db::establish_connection;
 use axum::{http::StatusCode, Json};
-use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
-use std::env;
 
 #[derive(Serialize, Deserialize)]
 pub struct DomainStats {
@@ -10,12 +9,7 @@ pub struct DomainStats {
 }
 
 pub async fn get_top_domains() -> Result<Json<Vec<DomainStats>>, StatusCode> {
-    let db_path = match env::var("RUN_ENV") {
-        Ok(env) if env == "production" => "/etc/pihole/pihole-FTL.db",
-        _ => "./pihole-FTL.db",
-    };
-
-    let conn = Connection::open(db_path).map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    let conn = establish_connection()?;
 
     let mut stmt = conn.prepare(
         "SELECT domain, COUNT(domain) as count FROM queries GROUP BY domain ORDER BY count DESC LIMIT 10"
