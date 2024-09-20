@@ -1,5 +1,9 @@
 use axum::{routing::get, Router};
-use routes::{stats::get_stats, top_domains::get_top_domains};
+use routes::{
+    clients::{get_clients, get_top_clients},
+    stats::get_stats,
+    top_domains::get_top_domains,
+};
 
 mod db;
 mod routes;
@@ -8,6 +12,8 @@ mod routes;
 async fn main() {
     // Build our application with a route
     let app = Router::new()
+        .route("/clients", get(get_clients))
+        .route("/top_clients", get(get_top_clients))
         .route("/stats", get(get_stats))
         .route("/top_domains", get(get_top_domains));
 
